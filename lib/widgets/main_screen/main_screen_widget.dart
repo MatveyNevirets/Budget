@@ -1,5 +1,6 @@
 import 'package:budget/Consts/AppColors.dart';
 import 'package:budget/Consts/AppStrings.dart';
+import 'package:budget/widgets/main_screen/main_screen_widget.dart';
 import 'package:flutter/material.dart';
 
 class MainScreenWidget extends StatelessWidget {
@@ -36,68 +37,56 @@ class TitleAndNavigationWidgets extends StatelessWidget {
       physics: ScrollPhysics(parent: ClampingScrollPhysics()),
       child: Container(
         margin: const EdgeInsets.all(30),
-        child: const Wrap(
+        child: Wrap(
           children: [
             Column(
               children: [
                 Text(AppStrings.subtitleText),
-                OneCategoryGraphicWidgets(
-                    // радиус 10, отступ от круга до линии 20
-                    categoryWidgetsColor,
+                CategoryPoint(
                     AppStrings.whatIsBudgetButtonText,
-                    false,
+                    AppColors.categoryWidgetsColor,
                     ovalRadius,
-                    indentOfOvalToLine),
+                    indentOfOvalToLine, false),
                 SizedBox(
-                  height: 38,
+                  height: 48,
                 ),
-                OneCategoryGraphicWidgets(
-                    // радиус 10, отступ от круга до линии 20
-                    alternativeCategoryWidgetsColor,
-                    AppStrings.whatIsBudgetButtonText,
-                    false,
+                CategoryPoint(
+                    AppStrings.baseCharactersButtonText,
+                    AppColors.alternativeCategoryWidgetsColor,
                     ovalRadius,
-                    indentOfOvalToLine),
+                    indentOfOvalToLine, false),
                 SizedBox(
-                  height: 38,
+                  height: 48,
                 ),
-                OneCategoryGraphicWidgets(
-                    // радиус 10, отступ от круга до линии 20
-                    categoryWidgetsColor,
-                    AppStrings.whatIsBudgetButtonText,
-                    false,
+                CategoryPoint(
+                    AppStrings.dohods,
+                    AppColors.categoryWidgetsColor,
                     ovalRadius,
-                    indentOfOvalToLine),
+                    indentOfOvalToLine, false),
                 SizedBox(
-                  height: 38,
+                  height: 48,
                 ),
-                OneCategoryGraphicWidgets(
-                    // радиус 10, отступ от круга до линии 20
-                    alternativeCategoryWidgetsColor,
-                    AppStrings.whatIsBudgetButtonText,
-                    false,
+                CategoryPoint(
+                    AppStrings.meshBudget,
+                    AppColors.alternativeCategoryWidgetsColor,
                     ovalRadius,
-                    indentOfOvalToLine),
+                    indentOfOvalToLine, false),
                 SizedBox(
-                  height: 38,
+                  height: 48,
                 ),
-                OneCategoryGraphicWidgets(
-                    // радиус 10, отступ от круга до линии 20
-                    categoryWidgetsColor,
-                    AppStrings.whatIsBudgetButtonText,
-                    false,
+                CategoryPoint(
+                    AppStrings.requesits,
+                    AppColors.categoryWidgetsColor,
                     ovalRadius,
-                    indentOfOvalToLine),
+                    indentOfOvalToLine, false),
                 SizedBox(
-                  height: 38,
+                  height: 48,
                 ),
-                OneCategoryGraphicWidgets(
-                    // радиус 10, отступ от круга до линии 20
-                    alternativeCategoryWidgetsColor,
-                    AppStrings.whatIsBudgetButtonText,
-                    true,
+                CategoryPoint(
+                    AppStrings.contacts,
+                    AppColors.alternativeCategoryWidgetsColor,
                     ovalRadius,
-                    indentOfOvalToLine),
+                    indentOfOvalToLine, true),
                 SizedBox(
                   height: 60,
                 ),
@@ -110,15 +99,75 @@ class TitleAndNavigationWidgets extends StatelessWidget {
   }
 }
 
+class CategoryPoint extends StatelessWidget {
+
+  final String textOfCategory;
+
+  final Color basedColor;
+  final double ovalRadius;
+  final double indentOfOvalToLine;
+
+  final bool isEndPoint;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        OneCategoryGraphicWidgets(
+            // радиус 10, отступ от круга до линии 20
+            basedColor,
+            isEndPoint,
+            ovalRadius,
+            indentOfOvalToLine),
+        SizedBox(width: 60,),
+        OneCategoryUIWidgets(textOfCategory: textOfCategory),
+      ],
+    );
+  }
+
+
+  CategoryPoint(this.textOfCategory, this.basedColor, this.ovalRadius,
+      this.indentOfOvalToLine, this.isEndPoint);
+}
+
+class OneCategoryUIWidgets extends StatelessWidget {
+  final String textOfCategory;
+
+  const OneCategoryUIWidgets({super.key, required this.textOfCategory});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 100
+        ),
+        Container(
+          child: Text(
+            textOfCategory,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+            textAlign: TextAlign.start,
+          ),
+        ),
+        SizedBox(height: 15, width: 21,),
+        ElevatedButton(
+          onPressed: () {},
+          child: Text(AppStrings.basicCheckButtonText),
+        ),
+      ],
+    );
+  }
+}
+
 class OneCategoryGraphicWidgets extends StatelessWidget {
   final Color baseColor;
-  final String textOfCategory;
   final bool isEndPoint;
   final double ovalRadius;
   final double indentOfOvalToLine;
 
-  const OneCategoryGraphicWidgets(this.baseColor, this.textOfCategory,
-      this.isEndPoint, this.ovalRadius, this.indentOfOvalToLine,
+  const OneCategoryGraphicWidgets(
+      this.baseColor, this.isEndPoint, this.ovalRadius, this.indentOfOvalToLine,
       {super.key});
 
   @override
@@ -126,51 +175,17 @@ class OneCategoryGraphicWidgets extends StatelessWidget {
     return Container(
       child: Column(
         children: [
-          Row(
+          Column(
             children: [
-              Column(
-                children: [
-                  const SizedBox(
-                    height: 45,
-                  ),
-                  CustomPaint(
-                    painter: DrawingCirclePainter(baseColor, ovalRadius),
-                  ),
-                  CheckIsEndPoint(
-                      isEndPoint, baseColor, ovalRadius, indentOfOvalToLine),
-                ],
+              CustomPaint(
+                painter: DrawingCirclePainter(baseColor, ovalRadius),
               ),
-              const SizedBox(
-                width: 70,
-                height: 0,
-                child: ColoredBox(
-                  color: Colors.black,
-                ),
-              ), //Здесь можно текст двигать
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    width: 0,
-                    height: 135,
-                    child: ColoredBox(
-                      color: Colors.black,
-                    ),
-                  ),
-                  Container(
-                    child: Text(
-                      textOfCategory,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
-                      textAlign: TextAlign.start,
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Text(AppStrings.basicCheckButtonText),
-                  ),
-                ],
-              ),
+              CheckIsEndPoint(
+                  isEndPoint, baseColor, ovalRadius, indentOfOvalToLine),
             ],
+          ),
+          const SizedBox(
+            width: 8,
           ),
         ],
       ),
